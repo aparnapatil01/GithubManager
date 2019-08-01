@@ -7,12 +7,22 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class DataService {
   searchUrl = "https://api.github.com/search/users?q=";
+  // testUrl = "http://dummy.restapiexample.com/api/v1/employees";
 
   constructor(private http: HttpClient) { }
 
-  searchUsers(text: string): Observable<HttpResponse<any>> {
+  searchUsers(text: string): Observable<HttpResponse<any[]>> {
     return this.http.get<any>(this.searchUrl + text)
-      .pipe(catchError(this.handleError));
+        .pipe(
+            catchError(this.handleError)
+        )
+  }
+
+  getUser(url: string) : Observable<HttpResponse<any[]>> {
+    return this.http.get<any>(url)
+    .pipe(
+      catchError(this.handleError)
+    )
   }
 
   private handleError(error: HttpErrorResponse) {

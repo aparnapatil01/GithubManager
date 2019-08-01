@@ -1,1 +1,19 @@
-<h1>Hello</h1>
+<main> 
+    <gh-filter-textbox (changed)="filterChanged($event)"></gh-filter-textbox>
+
+    <div class="container">
+        <div class="row card-container">
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let user of gitHubUsers">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="" alt="">
+                        <p>{{user.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!gitHubUsers.length">
+                No Records
+            </div>
+        </div>
+    </div>
+</main>

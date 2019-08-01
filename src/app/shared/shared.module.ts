@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { FormsModule } from '@angular/forms';
+
 import { FilterTextboxComponent } from './filter-textbox/filter-textbox.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
-  exports: [FilterTextboxComponent],
+  exports: [FormsModule, FilterTextboxComponent],
   declarations: [FilterTextboxComponent]
 })
 export class SharedModule { }
