@@ -1,15 +1,31 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class DataService {
-  searchUrl = "https://api.github.com/search/users?q=varun";
+  searchUrl = "https://api.github.com/search/users?q=";
 
   constructor(private http: HttpClient) { }
 
-  searchUsers(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(this.searchUrl);
+  searchUsers(text: string): Observable<HttpResponse<any>> {
+    return this.http.get<any>(this.searchUrl + text)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if(error.error instanceof ErrorEvent) {
+      console.log('An error occurred: ', error.error.message);
+    } else {
+      // Backend error
+      console.log(
+        `Backend returned message ${error.status}, ` + 
+        `body was: ${error.message}`
+      );
+    }
+
+    return throwError('Something bad happened; please try again later.');
   }
 }
