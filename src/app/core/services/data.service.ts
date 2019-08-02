@@ -2,21 +2,33 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
+
+import { IGHUser } from '../../shared/interfaces';
 
 @Injectable()
 export class DataService {
   searchUrl = "https://api.github.com/search/users?q=";
-  // testUrl = "http://dummy.restapiexample.com/api/v1/employees";
+  testUrl = "http://dummy.restapiexample.com/api/v1/employees";
 
   constructor(private http: HttpClient) { }
 
-  searchUsers(text: string): Observable<HttpResponse<any[]>> {
+  searchUsers(text: string): Observable<IGHUser[]> {
     return this.http.get<any>(this.searchUrl + text)
         .pipe(
+            map((res) => res.items),
             catchError(this.handleError)
         )
   }
+
+  // searchUsers(text: string): Observable<any[]> {
+  //   return this.http.get<any>(this.testUrl)
+  //       .pipe(
+  //           map((res) => res),
+  //           catchError(this.handleError)
+  //       )
+  // }
 
   getUser(url: string) : Observable<HttpResponse<any[]>> {
     return this.http.get<any>(url)

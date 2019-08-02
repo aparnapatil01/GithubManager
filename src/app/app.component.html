@@ -16,5 +16,5 @@
             </div>
         </div>
     </div>
-    <gh-pagination></gh-pagination>
+    <gh-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></gh-pagination>
 </main>

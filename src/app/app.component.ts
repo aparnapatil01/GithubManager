@@ -1,30 +1,51 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../app/core/services/data.service';
+import { forkJoin, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
-import { forkJoin } from 'rxjs';
+import { DataService } from '../app/core/services/data.service';
+import { IGHUser } from './shared/interfaces';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  users: any[] = [];
+  pageSize = 3;
   gitHubUsers: any[] = [];
+  totalRecords = 0;
+  searchResults: any[] = [];
+  usersList: any[] = [];
 
   constructor(private dataService: DataService) {}
-  
+
+  userDetailPromise = obj => this.dataService.getUser(obj.url);
+
   filterChanged(input: string) {
-    this.users = [];
-    this.dataService.searchUsers(input).subscribe(res => {
-      res.items.forEach((user) => {
-        forkJoin(this.dataService.getUser(user.url))
-        .subscribe(res => {
-          this.users.push(...res);
-        }).add(() => {
-          this.gitHubUsers.push(...this.users);
-        })
-      })
+    this.usersList = [];
+    this.gitHubUsers = [];
+    this.totalRecords = 0;
+    if(!input.trim().length) return;
+
+    this.dataService.searchUsers(input).subscribe((data: IGHUser[])=> {
+      if(!data.length) return;
+      of(data).pipe(mergeMap(q => forkJoin(...q.map(this.userDetailPromise))))
+        .subscribe(usersDetail => {
+          this.usersList = usersDetail;
+          this.totalRecords = usersDetail.length;
+          this.getPagedGitHubUsers(1);
+        });
     });
+  }
+
+  pageChanged(page: number) {
+    this.getPagedGitHubUsers(page);
+  }
+
+  getPagedGitHubUsers(page: number) {
+    const skipVal = (page-1) * this.pageSize;
+    const topVal = skipVal + this.pageSize;
+    this.gitHubUsers = this.usersList.slice(skipVal, topVal);
   }
 
   ngOnInit() {
