@@ -1,7 +1,11 @@
 <nav [hidden]="!isVisible">
-  <ul>
+  <ul class="pagination">
+    <li (click)="firstLast(1)"><a>First</a></li>
+    <li (click)="previousNext(-1)"><a [class.disabled]="!previousEnabled">Previous</a></li>
     <li *ngFor="let page of pages" (click)="changePage(page, $event)" [class.active]="currentPage == page">
-      <a>{{page}}</a>
+      <a >{{page}}</a>
     </li>
+    <li (click)="previousNext(1)"><a [class.disabled]="!nextEnabled">Next</a></li>
+    <li (click)="firstLast(-1)"><a>Last</a></li>
   </ul>
 </nav>

@@ -11,7 +11,7 @@ import { IGHUser } from './shared/interfaces';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  pageSize = 3;
+  pageSize = 5;
   gitHubUsers: any[] = [];
   totalRecords = 0;
   searchResults: any[] = [];
@@ -43,6 +43,7 @@ export class AppComponent implements OnInit {
   }
 
   getPagedGitHubUsers(page: number) {
+    // if no page, start skipVal from zero
     const skipVal = (page-1) * this.pageSize;
     const topVal = skipVal + this.pageSize;
     this.gitHubUsers = this.usersList.slice(skipVal, topVal);
