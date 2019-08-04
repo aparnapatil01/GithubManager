@@ -30,8 +30,19 @@ export class DataService {
   //       )
   // }
 
-  getUser(url: string) : Observable<HttpResponse<any[]>> {
-    return this.http.get<any>(url)
+  getUser(url: string, score: number) : Observable<IGHUser> {
+    return this.http.get<IGHUser>(url)
+    .pipe(
+      map(res => {
+        res.score = score;
+        return res;
+      }),
+      catchError(this.handleError)
+    )
+  }
+
+  getUserRepos(url: string): Observable<IGHUser[]> {
+    return this.http.get<any>(url+'/repos')
     .pipe(
       catchError(this.handleError)
     )
