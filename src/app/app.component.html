@@ -1,20 +1,66 @@
-<main> 
-    <gh-filter-textbox (changed)="filterChanged($event)"></gh-filter-textbox>
+<main>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="collapse navbar-collapse" id="navbarText">
+                <div class="form-group mb-0 mr-4">
+            <select class="form-control" (change)="orderBy($event.target.value)">
+                <option selected>Select Menu</option>
+                <option value="name|-1">Name (A-Z)</option>
+                <option value="name|1">Name (Z-A)</option>
+                <option value="score|1">Score &#8593;</option>
+                <option value="score|-1">Score &darr;</option>
+            </select>
+            </div>
+            <gh-filter-textbox (changed)="filterChanged($event)"></gh-filter-textbox>
+        </div>
+    </nav>
 
-    <div class="container">
-        <div class="row card-container">
-            <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let user of gitHubUsers">
-                <div class="card">
-                    <div class="card-body">
-                        <img src="" alt="">
-                        <p>{{user.name}}</p>
+    <div class="d-flex justify-content-center mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center" *ngIf="status">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-            </div>
-            <div *ngIf="!gitHubUsers.length">
-                No Records
+                <span *ngIf="usersList.length"><b>Total Results: </b>{{usersList.length}}</span>
+                <div class="card w-40 mb-3" *ngFor="let user of gitHubUsers; index as i">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src="{{user.avatar_url}}" class="card-image" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body-content">
+                                    <h5>{{user.name}}</h5>
+                                    <p class="mb-0">Profile URL: {{user.html_url}}</p>
+                                    <p class="mb-0">Score: {{user.score}}</p>
+                                    <p class="mb-0">Followers: {{user.followers}}</p>
+                                    <p class="mb-0 float-left">Following: {{user.following}}</p>
+                                    <a class="btn repoDetailBtn float-right" data-toggle="collapse"
+                                        (click)="getUserRepos(user.url, $event)" href="#repositories{{i}}"
+                                        aria-expanded="false">{{detailCollapseBtnText}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse" id="repositories{{i}}">
+                        <table class="table table-striped">
+                            <tbody *ngFor="let repo of userRepositories">
+                                <tr>
+                                    <td>Repository URL: </td>
+                                    <td>{{repo.html_url}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Stars: </td>
+                                    <td>{{repo.stargazers_count}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <gh-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)">
+                    </gh-pagination>
             </div>
         </div>
     </div>
-    <gh-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></gh-pagination>
 </main>
