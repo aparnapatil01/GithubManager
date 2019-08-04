@@ -1,11 +1,13 @@
-<nav [hidden]="!isVisible">
-  <ul class="pagination">
-    <li (click)="firstLast(1)"><a>First</a></li>
-    <li (click)="previousNext(-1)"><a [class.disabled]="!previousEnabled">Previous</a></li>
-    <li *ngFor="let page of pages" (click)="changePage(page, $event)" [class.active]="currentPage == page">
-      <a >{{page}}</a>
-    </li>
-    <li (click)="previousNext(1)"><a [class.disabled]="!nextEnabled">Next</a></li>
-    <li (click)="firstLast(-1)"><a>Last</a></li>
-  </ul>
+<nav aria-label="Page navigation" class="mt-2" [hidden]="!isVisible">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" (click)="firstLast(1)">
+        <a class="page-link">First</a>
+      </li>
+      <li class="page-item" (click)="previousNext(-1)" [class.disabled]="!previousEnabled"><a class="page-link">Previous</a></li>
+      <li class="page-item" *ngFor="let page of pages" (click)="changePage(page, $event)" [class.active]="currentPage == page"><a class="page-link">{{page}}</a></li>
+      <li class="page-item" (click)="previousNext(1)" [class.disabled]="!nextEnabled">
+        <a class="page-link">Next</a>
+      </li>
+      <li class="page-item" (click)="firstLast(-1)"><a class="page-link">Last</a></li>
+    </ul>
 </nav>

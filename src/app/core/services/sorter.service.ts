@@ -34,4 +34,3 @@ export class SorterService {
     return (val && (typeof val === 'string' || val instanceof String));
   }
 }
-
