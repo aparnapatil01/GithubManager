@@ -10,7 +10,6 @@ import { IGHUser } from '../../shared/interfaces';
 @Injectable()
 export class DataService {
   searchUrl = "https://api.github.com/search/users?q=";
-  testUrl = "http://dummy.restapiexample.com/api/v1/employees";
 
   constructor(private http: HttpClient) { }
 
@@ -21,14 +20,6 @@ export class DataService {
             catchError(this.handleError)
         )
   }
-
-  // searchUsers(text: string): Observable<any[]> {
-  //   return this.http.get<any>(this.testUrl)
-  //       .pipe(
-  //           map((res) => res),
-  //           catchError(this.handleError)
-  //       )
-  // }
 
   getUser(url: string, score: number) : Observable<IGHUser> {
     return this.http.get<IGHUser>(url)
