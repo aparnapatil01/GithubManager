@@ -23,6 +23,7 @@
                     </div>
                 </div>
                 <span *ngIf="usersList.length"><b>Total Results: </b>{{usersList.length}}</span>
+                <span *ngIf="found">No Records Found</span>
                 <div class="card w-40 mb-3" *ngFor="let user of gitHubUsers; index as i">
                     <div class="card-body">
                         <div class="row">

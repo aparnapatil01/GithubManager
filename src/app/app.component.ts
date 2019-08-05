@@ -19,12 +19,14 @@ export class AppComponent implements OnInit {
   userRepositories: any[] = [];
   status: boolean = false;
   detailCollapseBtnText: string = "Details";
+  found: boolean = false;
 
   constructor(private dataService: DataService, private sorterService: SorterService) {}
 
   userDetailPromise = obj => this.dataService.getUser(obj.url, obj.score);
 
   filterChanged(input: string) {
+    this.found = false;
     this.status = true;
     this.usersList = [];
     this.gitHubUsers = [];
@@ -37,7 +39,7 @@ export class AppComponent implements OnInit {
 
     this.dataService.searchUsers(input).subscribe((data: IGHUser[])=> {
       this.status = false;
-      if(!data.length) {return};
+      if(!data.length) { this.found = true; return};
       of(data).pipe(mergeMap(q => forkJoin(...q.map(this.userDetailPromise))))
         .subscribe(usersDetail => {
           this.usersList = usersDetail;
